@@ -7,15 +7,17 @@ const trimLogsSize : number = 200;
 
 // Database interface
 interface DBOptions
-  { host    : string
-  , database: string
-  , user?   : string
-  , port?   : number
+  { host      : string
+  , database  : string
+  , user?     : string
+  , password? : string
+  , port?     : number
   };
 
 // Actual database options
 const options : DBOptions = {
   // user: ,
+  // password: ,
   host: 'localhost',
   database: 'lovelystay_test',
 };
@@ -52,7 +54,6 @@ db.none('CREATE TABLE github_users (id BIGSERIAL, login TEXT, name TEXT, company
     },
   json: true
 }))
-.tap(data => console.log(typeof data))
 .then((data: GithubUsers) => db.one(
   'INSERT INTO github_users (login) VALUES ($[login]) RETURNING id', data)
 ).then(({id}) => console.log(id))
